@@ -29,6 +29,7 @@
         "no-return-await": 2,
         "import/no-unresolved": 2,
         "import/no-commonjs": 2,
-        "import/extensions": [2, "ignorePackages"]
+        "import/extensions": [2, "ignorePackages"],
+        "no-underscore-dangle": "off"
     }
 }
