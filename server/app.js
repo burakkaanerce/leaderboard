@@ -1,4 +1,5 @@
 import express from 'express'
+
 import middlewareWorker from './middlewares/index.js'
 
 const app = express()
