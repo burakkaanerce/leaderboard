@@ -1,8 +1,17 @@
 import Repository from '../repository/index.js'
-import User from '../models/user.model.js'
 
-async function getAll () {
-  const values = await Repository.user.list(User)
+async function findAll () {
+  const values = await Repository.user.list()
+  return values
+}
+
+async function findById (userId) {
+  const values = await Repository.user.listById(userId)
+  return values
+}
+
+async function findByName (userName) {
+  const values = await Repository.user.listByName(userName)
   return values
 }
 
@@ -12,6 +21,8 @@ async function createUser (userObj) {
 }
 
 export default {
-  getAll,
+  findAll,
+  findById,
+  findByName,
   createUser,
 }

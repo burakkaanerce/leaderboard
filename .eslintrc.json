@@ -30,6 +30,7 @@
         "import/no-unresolved": 2,
         "import/no-commonjs": 2,
         "import/extensions": [2, "ignorePackages"],
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "no-console": "off"
     }
 }

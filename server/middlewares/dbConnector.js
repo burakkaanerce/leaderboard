@@ -4,7 +4,7 @@ import config from '../config/index.js'
 export default async () => {
   await mongoose.connect(
     config.DB_URI,
-    { useNewUrlParser: true, useUnifiedTopology: true },
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
   ).then(() => {
     console.log('connection to database established')
   }).catch((err) => {
