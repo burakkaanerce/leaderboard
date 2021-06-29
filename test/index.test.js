@@ -42,8 +42,6 @@ function createAndAddScore (userName) {
       expect(createRes.statusCode).to.equal(200)
       expect(createRes.body.success).to.equal(true)
 
-      console.log('createRes: ', createRes.body.data._id)
-
       describe('adding score', async () => {
         it(`adding score for ${userName}`, async () => {
           const addScoreRes = await addScore(createRes.body.data._id)

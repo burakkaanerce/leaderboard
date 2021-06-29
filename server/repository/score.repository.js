@@ -50,9 +50,9 @@ async function getLeaderboardById (userId) {
               $expr: {
                 $and: [
                   { $eq: ['$userId', '$$userId'] },
-                  { $eq: ['$year', 2021] },
-                  { $eq: ['$week', 26] },
-                  { $eq: ['$day', 2] },
+                  { $eq: ['$year', date.year] },
+                  { $eq: ['$week', date.week] },
+                  { $eq: ['$day', date.day] },
                 ],
               },
             },
@@ -90,9 +90,9 @@ async function getLeaderboardById (userId) {
               $expr: {
                 $and: [
                   { $eq: ['$userId', '$$userId'] },
-                  { $eq: ['$year', 2021] },
-                  { $eq: ['$week', 26] },
-                  { $eq: ['$day', 1] },
+                  { $eq: ['$year', date.year] },
+                  { $eq: ['$week', date.week] },
+                  { $eq: ['$day', (date.day - 1)] },
                 ],
               },
             },
@@ -132,8 +132,8 @@ async function getLeaderboardById (userId) {
               $expr: {
                 $and: [
                   { $eq: ['$userId', '$$userId'] },
-                  { $eq: ['$year', 2021] },
-                  { $eq: ['$week', 26] },
+                  { $eq: ['$year', date.year] },
+                  { $eq: ['$week', date.week] },
                 ],
               },
             },
@@ -271,9 +271,9 @@ async function getLeaderboard () {
               $expr: {
                 $and: [
                   { $eq: ['$userId', '$$userId'] },
-                  { $eq: ['$year', 2021] },
-                  { $eq: ['$week', 26] },
-                  { $eq: ['$day', 2] },
+                  { $eq: ['$year', date.year] },
+                  { $eq: ['$week', date.week] },
+                  { $eq: ['$day', date.day] },
                 ],
               },
             },
@@ -311,9 +311,9 @@ async function getLeaderboard () {
               $expr: {
                 $and: [
                   { $eq: ['$userId', '$$userId'] },
-                  { $eq: ['$year', 2021] },
-                  { $eq: ['$week', 26] },
-                  { $eq: ['$day', 1] },
+                  { $eq: ['$year', date.year] },
+                  { $eq: ['$week', date.week] },
+                  { $eq: ['$day', (date.day - 1)] },
                 ],
               },
             },
@@ -353,8 +353,8 @@ async function getLeaderboard () {
               $expr: {
                 $and: [
                   { $eq: ['$userId', '$$userId'] },
-                  { $eq: ['$year', 2021] },
-                  { $eq: ['$week', 26] },
+                  { $eq: ['$year', date.year] },
+                  { $eq: ['$week', date.week] },
                 ],
               },
             },
@@ -401,8 +401,72 @@ async function getLeaderboard () {
   }
 }
 
+async function getLeaderboardByDate (dateObj) {
+  const totalScoreParser = [
+    {
+      $project: {
+        userId: {
+          $toString: '$_id',
+        },
+        userName: 1,
+        age: 1,
+      },
+    },
+    {
+      $lookup: {
+        from: 'scores',
+        as: 'scores',
+        let: { userId: '$userId' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$userId', '$$userId'] },
+                  { $eq: ['$year', dateObj.year] },
+                  { $eq: ['$week', dateObj.week] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        userId: 1,
+        userName: 1,
+        age: 1,
+        score: { $sum: '$scores.score' },
+      },
+    },
+  ]
+
+  const top100Conds = [
+    {
+      $sort: {
+        totalScore: -1,
+      },
+    },
+    {
+      $limit: 100,
+    },
+  ]
+
+  const top100 = await User.aggregate([
+    ...totalScoreParser,
+    ...top100Conds,
+  ])
+
+  return {
+    dateObj,
+    top100,
+  }
+}
+
 export default {
   add,
   getLeaderboard,
   getLeaderboardById,
+  getLeaderboardByDate,
 }
