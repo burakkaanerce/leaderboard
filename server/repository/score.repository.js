@@ -16,7 +16,7 @@ async function add (scoreObj) {
       {
         year: today.year,
         week: today.week,
-        day: today.day + 1,
+        day: today.day,
         userId: `${scoreObj.userId}`,
       },
       { $inc: { score: scoreObj.score } },

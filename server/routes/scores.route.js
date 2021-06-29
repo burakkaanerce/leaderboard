@@ -30,7 +30,7 @@ router.get('/leaderboard/:userId',
     }
   }), async (req, res, next) => {
     try {
-      const leaderboard = await ScoreController.getLeaderboard(req.params.userId)
+      const leaderboard = await ScoreController.getLeaderboardById(req.params.userId)
       return res.status(200).json({ success: true, data: leaderboard })
     } catch (err) {
       return next(err)
@@ -39,7 +39,7 @@ router.get('/leaderboard/:userId',
 
 router.get('/leaderboard', async (req, res, next) => {
   try {
-    const leaderboard = await ScoreController.getLeaderboardById()
+    const leaderboard = await ScoreController.getLeaderboard()
     return res.status(200).json({ success: true, data: leaderboard })
   } catch (err) {
     return next(err)
