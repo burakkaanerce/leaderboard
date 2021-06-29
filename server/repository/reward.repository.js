@@ -42,7 +42,7 @@ async function rewardPool (dateObj) {
 }
 
 async function distribute (dateObj) {
-  const reward = (await rewardPool(dateObj)).totalReward
+  const reward = (await rewardPool(dateObj)).totalReward * 0.02
   const top100 = await scoreRepository.getLeaderboard()
 
   await Promise.all(top100.top100.map(async (user, index) => {
